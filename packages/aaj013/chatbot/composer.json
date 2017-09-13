@@ -1,0 +1,11 @@
+{
+    "name": "aaj013/chatbot",
+    "description": "This is a test chatbot package developed by a fellow aaj013 @ICFOSS",
+    "authors": [
+        {
+            "name": "aaj013",
+            "email": "aaj013@live.com"
+        }
+    ],
+    "require": {}
+}
