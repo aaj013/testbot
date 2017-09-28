@@ -8,28 +8,21 @@ use App\Http\Controllers\Controller;
 class BotController extends Controller
 {
     //
-    public function add($a, $b){
-      $result = $a + $b;
-	    return view('chatbot::add', compact('result'));
-    }
 
-    public function subtract($a, $b){
-    	echo $a - $b;
-    }
+    public function generateResponse($input = ''){
+      $json_response=array('status'=>'false','input'=>'','reply'=>'');
 
-    public function generateResponse($msg,Request $request){
-      $input=$response='';
-      if($msg!=''){
-        $input=$msg;
-      }
-      if($request->input!=''){
-        $input=$request->input;
-      }
-      echo "Input: ".$input;
+      if($input!="")  $json_response['input']=$input;
 
-      if($input=='hello'){
-        $response="hi user! I'm chatbot. You can talk to me!";
+      if($json_response['input']=="hello"){
+        $json_response['reply']="hi user! I'm chatbot. You can talk to me!";
+        $json_response['status']="true";
       }
-      echo "<br/>Response: ".$response;
+      else if($json_response['input']!=""){
+        $json_response['reply']="I can't follow what you said right now! Can you be more clear?";
+        $json_response['status']="true";
+      }
+
+      return json_encode($json_response);
     }
 }
