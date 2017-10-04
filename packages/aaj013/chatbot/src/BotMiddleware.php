@@ -15,22 +15,16 @@ class BotMiddleware
      */
     public function handle($request, Closure $next)
     {
-//              $response = $next($request);
-//              return $response;
-              header("Access-Control-Allow-Origin: *");
-              // ALLOW OPTIONS METHOD
-              $headers = [
-                  'Access-Control-Allow-Methods' => 'POST, GET, OPTIONS, PUT, DELETE',
-                  'Access-Control-Allow-Headers' => 'Content-Type, X-Auth-Token, Origin, Authorization'
-              ];
+              $trusted_domains = ["http://localhost:4200", "http://127.0.0.1:4200", "http://localhost:3000", "http://127.0.0.1:3000"];
+              if (isset($request->server()['HTTP_ORIGIN'])) {
+                  $origin = $request->server()['HTTP_ORIGIN'];
 
-              if ($request->getMethod() == "OPTIONS") {
-                  // The client-side application can set only headers allowed in Access-Control-Allow-Headers
-                  return \Response::make('OK', 200, $headers);
+                  if (in_array($origin, $trusted_domains)) {
+                      header('Access-Control-Allow-Origin: ' . $origin);
+                      header('Access-Control-Allow-Headers: Origin, Content-Type, Authorization, X-Auth-Token,x-xsrf-token');
+                      header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE');
+                  }
               }
-              $response = $next($request);
-              foreach ($headers as $key => $value)
-                  $response->header($key, $value);
-              return $response;
+              return $next($request);
     }
 }
